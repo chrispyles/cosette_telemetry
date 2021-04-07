@@ -40,18 +40,17 @@ class CosetteTelemetryPlugin(AbstractOtterPlugin):
         self.data = {test: global_env[name] for test, name in variable_names.items()} # maps test name to query string via variable name (provided by yaml)
     
     def after_grading(self, results):
-        results = copy.deepcopy(results)
-        to_delete = []
-        ok = []
-        for key in results.results:
-            for test in self.data:
-                if not re.search(rf"""\b{test}\b""", key) and key not in to_delete and key not in ok:
-                    # results.results.pop(key)
-                    to_delete.append(key)
-                else:
-                    ok.append(key)
-        for key in to_delete:
-            results.results.pop(key)
+#         results = copy.deepcopy(results)
+#         to_delete = []
+#         ok = []
+#         for key in results.results:
+#             if not any(re.search(rf"\b{test}\b", key) for test in self.data):
+#                 results.results.pop(key)
+# #             for test in self.data:
+# #                 if not re.search(rf"""\b{test}\b""", key) and key not in to_delete and key not in ok:
+# #                     # results.results.pop(key)
+# #                     to_delete.append(key)
+# #                 else:
         results = results.to_gradescope_dict({})
         output = {'queries': self.data, 'results': results}
         output = json.dumps(output)
