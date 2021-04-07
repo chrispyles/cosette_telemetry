@@ -37,7 +37,7 @@ class CosetteTelemetryPlugin(AbstractOtterPlugin):
 
     def after_execution(self, global_env):
         variable_names = self.plugin_config["query_var_names"] # list of variable names provided by instructor to grab from global_env
-        self.data = {test: global_env[name] for test, name in variable_names.items()} # maps test name to query string via variable name (provided by yaml)
+        self.data = {test: (global_env[name] if name in global_env else None) for test, name in variable_names.items()} # maps test name to query string via variable name (provided by yaml)
     
     def after_grading(self, results):
 #         results = copy.deepcopy(results)
